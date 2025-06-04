@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Promoter Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🧬 DNA Promoter Prediction Result</h1>
+        
+        <div class="result-card">
+            <h2>📝 Input Sequence:</h2>
+            <div class="sequence">
+                {{ result.sequence }}
+            </div>
+            
+            <h2>🔬 Prediction:</h2>
+            <div class="prediction {% if result.is_promoter %}promoter{% else %}non-promoter{% endif %}">
+                {% if result.is_promoter %}
+                    🧬 PROMOTER SEQUENCE
+                {% else %}
+                    ❌ NON-PROMOTER SEQUENCE
+                {% endif %}
+            </div>
+            
+            <h2>📊 Confidence:</h2>
+            <div class="confidence">
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: {{ result.confidence }}%"></div>
+                </div>
+                <span class="confidence-text">{{ "%.1f"|format(result.confidence) }}%</span>
+            </div>
+            
+            <h2>📈 Detailed Probabilities:</h2>
+            <div class="probabilities">
+                <div class="prob-item">
+                    <span>🧬 Promoter:</span>
+                    <span>{{ "%.1f"|format(result.promoter_probability) }}%</span>
+                </div>
+                <div class="prob-item">
+                    <span>❌ Non-Promoter:</span>
+                    <span>{{ "%.1f"|format(result.non_promoter_probability) }}%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <a href="{{ url_for('index') }}" class="btn-back">🔄 Predict Another Sequence</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const confidenceFill = document.querySelector('.confidence-fill');
+            confidenceFill.style.width = '0%';
+            
+            setTimeout(() => {
+                confidenceFill.style.width = "{{ result.confidence }}%";
+            }, 500);
+
+            const prediction = document.querySelector('.prediction');
+            prediction.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => { this.style.transform = ''; }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

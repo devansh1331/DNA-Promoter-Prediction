@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Promoter Prediction</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>DNA Promoter Sequence Prediction</h1>
+        <p>Enter a DNA sequence to predict if it's a promoter region</p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" action="/predict">
+            <div class="form-group">
+                <label for="dna_sequence">DNA Sequence:</label>
+                <textarea 
+                    id="dna_sequence" 
+                    name="dna_sequence" 
+                    placeholder="Enter DNA sequence (e.g., ATCGATCGATCG...)"
+                    required
+                    rows="5"
+                ></textarea>
+            </div>
+            
+            <button type="submit" class="btn-predict">Predict</button>
+        </form>
+        
+        <div class="example">
+            <h3>Example Sequences:</h3>
+            <p><strong>Promoter:</strong> ATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCG</p>
+            <p><strong>Non-Promoter:</strong> AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
+        </div>
+    </div>
+</body>
+</html>
